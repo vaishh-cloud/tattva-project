@@ -25,17 +25,21 @@
   transition: width 0.3s ease-in-out;
   position: relative;
   z-index: 10;
+  overflow: visible;
 }
 
 .Sidebar.collapsed {
-  width: 70px;
+  width: 60px;
   overflow: hidden;
+  padding: 20px 10px;
+  align-items: center;
 }
 
 .SidebarTop {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  flex: 0 0 auto;
 }
 
 .AppTitle {
@@ -43,6 +47,11 @@
   font-weight: 600;
   color: white;
   text-align: center;
+  white-space: nowrap;
+}
+
+.Sidebar.collapsed .AppTitle {
+  display: none;
 }
 
 .NewChatButton {
@@ -58,10 +67,21 @@
   font-size: 15px;
   font-weight: 500;
   transition: background 0.2s ease;
+  justify-content: center;
 }
 
 .NewChatButton:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.Sidebar.collapsed .NewChatButton {
+  padding: 12px;
+  width: 40px;
+  height: 40px;
+}
+
+.Sidebar.collapsed .NewChatButton span {
+  display: none;
 }
 
 .SearchBox {
@@ -72,6 +92,10 @@
   background: rgba(255, 255, 255, 0.15);
   border-radius: 8px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.Sidebar.collapsed .SearchBox {
+  display: none;
 }
 
 .SearchBox input {
@@ -87,6 +111,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.Sidebar.collapsed .SidebarHeader {
+  display: none;
 }
 
 .SidebarTitle {
@@ -111,11 +139,16 @@
 .HistoryList {
   list-style: none;
   padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex-grow: 1;
+  flex: 1 1 auto;
+  height: calc(100vh - 320px) !important;
+  min-height: calc(100vh - 320px) !important;
+  max-height: calc(100vh - 320px) !important;
   overflow-y: auto;
+  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
@@ -131,6 +164,15 @@
   align-items: center;
   justify-content: space-between;
   transition: background 0.2s ease, transform 0.1s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.Sidebar.collapsed .HistoryItem {
+  padding: 10px;
+  justify-content: center;
 }
 
 .HistoryItem:hover {
@@ -143,9 +185,95 @@
   color: #004aad;
 }
 
+.Sidebar.collapsed .HistoryItem.active {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.HistoryItem.active .ChatActions button {
+  color: #004aad;
+}
+
+.HistoryItem .ChatActions {
+  display: none;
+}
+
+.HistoryItem:hover .ChatActions {
+  display: flex;
+}
+
+.Sidebar.collapsed .HistoryItem {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Sidebar.collapsed .HistoryItem:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.Sidebar.collapsed .HistoryItem:hover::after,
+.Sidebar.collapsed .HistoryItem:hover::before {
+  display: none;
+}
+
+.Sidebar.collapsed .HistoryItem:hover .CollapsedIcon {
+  display: block;
+}
+
+.HistoryItem.pinned .ChatActions button[title="Unpin chat"],
+.HistoryItem.pinned .ChatActions button[title="Pin chat"] {
+  color: white !important;
+}
+
+/* Updated pinned chat styling for expanded sidebar */
+.HistoryItem.pinned::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5l-3.75 3.75m-3-3a4.5 4.5 0 0 1 6.36 6.36l-7.07 7.07a4.5 4.5 0 0 1-6.36-6.36l3.75-3.75"/></svg>') no-repeat center;
+  background-size: contain;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.7));
+  z-index: 1;
+}
+
+.Sidebar.collapsed .HistoryItem.pinned::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5l-3.75 3.75m-3-3a4.5 4.5 0 0 1 6.36 6.36l-7.07 7.07a4.5 4.5 0 0 1-6.36-6.36l3.75-3.75"/></svg>') no-repeat center;
+  background-size: contain;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.7));
+  z-index: 1;
+}
+
+.ChatName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 24px; /* Adjusted to accommodate pin icon */
+}
+
+.Sidebar.collapsed .ChatName {
+  display: none;
+}
+
 .ChatActions {
   display: flex;
   gap: 8px;
+}
+
+.Sidebar.collapsed .ChatActions {
+  display: none;
 }
 
 .ChatActions button {
@@ -156,15 +284,42 @@
   padding: 4px;
   border-radius: 4px;
   transition: background 0.2s ease;
+  position: relative;
 }
 
 .ChatActions button:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.HistoryItem.active .ChatActions button:hover {
+  background: rgba(0, 74, 173, 0.2);
+}
+
+.HistoryItem.pinned .ChatActions button[title="Unpin chat"]::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 2px;
+  background: #090f5c;
+  transform: translate(-50%, -50%) rotate(45deg);
+  z-index: 1;
+}
+
 .AccountSection {
   margin-top: auto;
   position: relative;
+  flex: 0 0 auto;
+  min-height: 44px;
+  z-index: 1;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.Sidebar.collapsed .AccountSection {
+  display: block !important;
+  visibility: visible !important;
 }
 
 .AccountButton {
@@ -177,11 +332,30 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 8px;
   transition: background 0.2s ease;
+}
+
+.Sidebar.collapsed .AccountButton {
+  justify-content: center;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
 }
 
 .AccountButton:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.AccountButton span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Sidebar.collapsed .AccountButton span {
+  display: none;
 }
 
 .AccountMenu {
@@ -197,6 +371,11 @@
   flex-direction: column;
   gap: 5px;
   z-index: 30;
+}
+
+.Sidebar.collapsed .AccountMenu {
+  left: 70px;
+  bottom: 10px;
 }
 
 .AccountMenu button {
@@ -233,7 +412,7 @@
 }
 
 .RightPanel.with-preview {
-  padding-right: 420px;
+  padding-right: 50%;
 }
 
 .ChatContainer {
@@ -263,7 +442,8 @@
 .MessageWrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
 .ChatBubble {
@@ -280,11 +460,11 @@
   transition: background 0.2s ease;
 }
 
-.QueryBubble,
-.FileBubble {
+.UserBubble {
   background: #d1e7ff;
   align-self: flex-end;
   margin-left: auto;
+  border-bottom-right-radius: 4px;
 }
 
 .FileBubble {
@@ -303,15 +483,29 @@
   background: #e3e8ef;
   align-self: flex-start;
   margin-right: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-bottom-left-radius: 4px;
 }
 
 .MessageActions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  padding: 4px 8px;
+  background: #f0f4f8;
+  border-radius: 6px;
+  align-self: flex-start;
+  margin-bottom: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.MessageWrapper:hover .MessageActions,
+.MessageActions:hover {
+  opacity: 1;
+}
+
+.MessageWrapper.user .MessageActions {
+  align-self: flex-end;
 }
 
 .MessageActions button {
@@ -319,12 +513,57 @@
   border: none;
   color: #004aad;
   cursor: pointer;
-  padding: 2px;
-  transition: color 0.2s ease;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .MessageActions button:hover {
+  background: rgba(0, 74, 173, 0.2);
   color: #052b69;
+}
+
+.MessageActions button[title="Regenerate response"] {
+  color: #004aad;
+  background: rgba(0, 74, 173, 0.1);
+}
+
+.dark-mode .MessageActions button[title="Regenerate response"] {
+  color: #a0c4ff;
+  background: rgba(160, 196, 255, 0.1);
+}
+
+.ChatBubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.MessageActions button::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.MessageActions button:hover::after {
+  opacity: 1;
+}
+
+.dark-mode .MessageActions button::after {
+  background: #555;
 }
 
 .Timestamp {
@@ -341,14 +580,26 @@
   margin-top: 20%;
 }
 
+.LoadingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #666;
+  font-size: 16px;
+  font-weight: 400;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .QueryBox {
   display: flex;
   align-items: center;
   background: #f0f4f8;
   padding: 15px 20px;
-  gap: 15px;
+  gap: 10px;
   border-top: 1px solid #e2e8f0;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .UploadLabel {
@@ -406,11 +657,47 @@
   border: none;
   cursor: pointer;
   color: #004aad;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
 }
 
-.SendButton:hover {
+.SendButton:hover:not(:disabled) {
   transform: scale(1.05);
+  background: rgba(0, 74, 173, 0.1);
+}
+
+.SendButton.interrupting {
+  color: #d8000c;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.SendButton.interrupting:hover:not(:disabled) {
+  background: rgba(216, 0, 12, 0.15);
+  color: #b0000a;
+}
+
+.SendButton:disabled {
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .FilePreview {
@@ -438,7 +725,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  width: 400px;
+  width: 50%;
   height: 100vh;
   background: white;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
@@ -487,24 +774,36 @@
 /* Collapse Button */
 .CollapseButton {
   position: absolute;
-  left: 260px;
+  right: -50px;
   top: 20px;
   background: white;
   border: 1px solid #e2e8f0;
-  padding: 8px;
+  padding: 10px;
   border-radius: 8px;
   cursor: pointer;
-  transition: left 0.3s ease-in-out, transform 0.2s ease;
-  z-index: 20;
+  transition: transform 0.2s ease, right 0.3s ease-in-out;
+  z-index: 100;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Sidebar.collapsed .CollapseButton {
+  right: 10px;
+  top: 20px;
 }
 
 .CollapseButton:hover {
   transform: scale(1.05);
 }
 
-.Sidebar.collapsed + .CollapseButton {
-  left: 50px;
+.dark-mode .CollapseButton {
+  background: #3a3a3a;
+  border-color: #555;
+  color: #a0c4ff;
 }
 
 /* Error Notification */
@@ -513,8 +812,8 @@
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #ffdddd;
-  color: #d8000c;
+  background: #d1e7ff;
+  color: #052b69;
   padding: 12px 20px;
   border-radius: 8px;
   display: flex;
@@ -523,6 +822,162 @@
   z-index: 1000;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   animation: slideIn 0.3s ease-out;
+}
+
+.ErrorNotification button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #052b69;
+}
+
+.ErrorNotification button:hover {
+  color: #004aad;
+}
+
+.dark-mode .ErrorNotification {
+  background: #4b6cb7;
+  color: #e0e0e0;
+}
+
+.dark-mode .ErrorNotification button {
+  color: #e0e0e0;
+}
+
+.dark-mode .ErrorNotification button:hover {
+  color: #a0c4ff;
+}
+
+/* Drag and Drop Overlay */
+.DragDropOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 74, 173, 0.1);
+  border: 2px dashed #004aad;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: #004aad;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 12px;
+}
+
+.DragDropOverlay p {
+  margin-top: 10px;
+}
+
+/* Confirmation Modal */
+.ModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ConfirmationModal {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  border: none;
+}
+
+.ConfirmationModal h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #052b69;
+  margin-bottom: 12px;
+}
+
+.ConfirmationModal p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.ModalActions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.ModalButton {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.ModalButton.cancel {
+  background: #e3e8ef;
+  color: #052b69;
+  border: none;
+}
+
+.ModalButton.cancel:hover {
+  background: #d1d9e6;
+  transform: scale(1.05);
+}
+
+.ModalButton.confirm {
+  background: #004aad;
+  color: white;
+  border: none;
+}
+
+.ModalButton.confirm:hover {
+  background: #052b69;
+  transform: scale(1.05);
+}
+
+.dark-mode .ModalOverlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode .ConfirmationModal {
+  background: #2d3748;
+}
+
+.dark-mode .ConfirmationModal h3 {
+  color: #a0c4ff;
+}
+
+.dark-mode .ConfirmationModal p {
+  color: #e0e0e0;
+}
+
+.dark-mode .ModalButton.cancel {
+  background: #4a5568;
+  color: #a0c4ff;
+}
+
+.dark-mode .ModalButton.cancel:hover {
+  background: #5a6678;
+}
+
+.dark-mode .ModalButton.confirm {
+  background: #4b6cb7;
+}
+
+.dark-mode .ModalButton.confirm:hover {
+  background: #5a7bc7;
 }
 
 /* Dark Mode */
@@ -550,17 +1005,41 @@
   color: #e0e0e0;
 }
 
-.dark-mode .QueryBubble,
-.dark-mode .FileBubble {
+.dark-mode .UserBubble {
   background: #4b6cb7;
 }
 
-.dark-mode .FileBubble:hover {
+.dark-mode .UserBubble:hover {
   background: #5a7bc7;
+}
+
+.dark-mode .FileBubble {
+  background: #7b4b2a;
+}
+
+.dark-mode .FileBubble:hover {
+  background: #9c5e36;
 }
 
 .dark-mode .ResponseBubble {
   background: #4a5568;
+}
+
+.dark-mode .ResponseBubble:hover {
+  background: #5a6678;
+}
+
+.dark-mode .MessageActions {
+  background: #404040;
+}
+
+.dark-mode .MessageActions button {
+  color: #a0c4ff;
+}
+
+.dark-mode .MessageActions button:hover {
+  background: rgba(160, 196, 255, 0.2);
+  color: #d1e7ff;
 }
 
 .dark-mode .QueryBox {
@@ -574,12 +1053,39 @@
   color: #a0c4ff;
 }
 
+.dark-mode .FilePreview button {
+  color: #ff6b6b;
+}
+
 .dark-mode .QueryInput {
   color: #e0e0e0;
 }
 
 .dark-mode .QueryInput::placeholder {
   color: #aaa;
+}
+
+.dark-mode .SendButton {
+  color: #a0c4ff;
+}
+
+.dark-mode .SendButton:hover:not(:disabled) {
+  background: rgba(160, 196, 255, 0.2);
+  color: #d1e7ff;
+}
+
+.dark-mode .SendButton.interrupting {
+  color: #ff6b6b;
+}
+
+.dark-mode .SendButton.interrupting:hover:not(:disabled) {
+  background: rgba(255, 107, 107, 0.25);
+  color: #ff8787;
+}
+
+.dark-mode .SendButton:disabled {
+  color: #666;
+  opacity: 0.5;
 }
 
 .dark-mode .Timestamp {
@@ -604,7 +1110,8 @@
 }
 
 .dark-mode .AccountMenu {
-  background: #404040;
+  background: #2d3748;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .dark-mode .AccountMenu button {
@@ -612,7 +1119,29 @@
 }
 
 .dark-mode .AccountMenu button:hover {
-  background: #555;
+  background: #4a5568;
+}
+
+.dark-mode .DragDropOverlay {
+  background: rgba(160, 196, 255, 0.1);
+  border-color: #a0c4ff;
+  color: #a0c4ff;
+}
+
+.UserBubble .MessageActions {
+  background: rgba(209, 231, 255, 0.7);
+}
+
+.ResponseBubble .MessageActions {
+  background: rgba(227, 232, 239, 0.7);
+}
+
+.dark-mode .UserBubble .MessageActions {
+  background: rgba(75, 108, 183, 0.7);
+}
+
+.dark-mode .ResponseBubble .MessageActions {
+  background: rgba(74, 85, 104, 0.7);
 }
 
 /* Animations */
@@ -636,13 +1165,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Add these to your Mainpage.css */
-
 /* Message Styles */
-.MessageWrapper {
-  margin-bottom: 20px;
-}
-
 .MessageHeader {
   display: flex;
   align-items: center;
@@ -655,25 +1178,6 @@
 .MessageContent {
   line-height: 1.6;
   word-wrap: break-word;
-}
-
-.ChatBubble {
-  padding: 16px;
-  border-radius: 12px;
-  max-width: 85%;
-  position: relative;
-}
-
-.UserBubble {
-  background: #d1e7ff;
-  margin-left: auto;
-  border-bottom-right-radius: 4px;
-}
-
-.ResponseBubble {
-  background: #e3e8ef;
-  margin-right: auto;
-  border-bottom-left-radius: 4px;
 }
 
 .ErrorBubble {
@@ -701,25 +1205,6 @@
 
 .FileAttachment:hover {
   background: rgba(255, 255, 255, 0.5);
-}
-
-.MessageActions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
-}
-
-.MessageActions button {
-  background: none;
-  border: none;
-  color: #004aad;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.MessageActions button:hover {
-  opacity: 1;
 }
 
 /* Markdown Content Styles */
@@ -756,11 +1241,6 @@
 .react-markdown ul, 
 .react-markdown ol {
   margin: 0.8em 0;
-  padding-left: 1.5em;
-}
-
-.react-markdown li {
-  margin: 0.4em 0;
 }
 
 .react-markdown blockquote {
@@ -896,15 +1376,6 @@
 }
 
 /* File Preview */
-.FilePreview {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 16px;
-  background: #f0f4f8;
-  border-top: 1px solid #e2e8f0;
-}
-
 .FileInfo {
   display: flex;
   align-items: center;
@@ -949,6 +1420,7 @@
 
 .dark-mode .TipsSection li {
   border-bottom-color: #555;
+  color: rgba(255, 255, 255, 0.833);
 }
 
 .dark-mode .react-markdown pre {
@@ -970,4 +1442,119 @@
 .dark-mode .react-markdown th, 
 .dark-mode .react-markdown td {
   border-color: #555;
+}
+
+/* Account Info Styles */
+.AccountInfo {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 5px;
+}
+
+.AccountEmail {
+  font-size: 14px;
+  font-weight: 500;
+  color: #004aad;
+}
+
+.AccountUsername {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.dark-mode .AccountEmail {
+  color: #a0c4ff;
+}
+
+.dark-mode .AccountUsername {
+  color: #bbb;
+}
+
+.dark-mode .AccountInfo {
+  border-bottom-color: #555;
+}
+
+/* Collapsed Sidebar Icons */
+.CollapsedIcon {
+  display: none;
+}
+
+.Sidebar.collapsed .CollapsedIcon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 8px 0;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.Sidebar.collapsed .CollapsedIcon:hover {
+  transform: scale(1.1);
+}
+
+/* Active chat indicator for collapsed sidebar */
+.Sidebar.collapsed .HistoryItem.active::after {
+  content: "";
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.DocxPreview pre {
+  white-space: pre-wrap;
+  overflow-y: auto;
+  height: 100%;
+  padding: 10px;
+}
+
+.GuestWarning {
+  background-color: #fff9c4; 
+  color: #000000; 
+  padding: 2px 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.GuestWarningNotification {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px;
+  font-size: 14px;
+}
+
+.GuestWarningNotification svg {
+  flex-shrink: 0;
+}
+
+/* Image Preview */
+.ImagePreview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+  overflow: auto;
+}
+
+.ImagePreview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }

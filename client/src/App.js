@@ -4,7 +4,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LandingPage from './components/LandingPage/LandingPage';
 import LoginPage from './components/LoginPage/LoginPage';
 import Mainpage from './components/Mainpage/Mainpage';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Retrieve user from localStorage
+const user = JSON.parse(localStorage.getItem('user'));
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -16,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/Main',
-    element: <Mainpage />,
+    element: <Mainpage user={user} />, // 👈 Pass user prop here
   },
 ]);
 
